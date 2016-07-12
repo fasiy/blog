@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /var/www/gitblog-2.2/blog
+git pull 
