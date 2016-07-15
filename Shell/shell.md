@@ -1,7 +1,7 @@
 <!--
-  author:donar
+  author:fasiy
   head:http://www.easyicon.net/api/resizeApi.php?id=556429&size=128
-  date:2016-06-17
+  date:2016-07-12
   title: shell编程踩坑总结
   tags:shell
   category:技术笔记
@@ -108,3 +108,37 @@ csc.sh
         ssh ${user}@${ip} "ls" < /dev/null
     done
 ```
+
+#案例二
+####shell的管道技巧-while read line
+**在Bash Shell中，管道的最后一个命令都是在子Shell中执行的。**这意味着在子Shell中赋值的变量对父Shell是无效的。所以当我们将管道输出传送到一个循环结构，填入随后将要使用的变量，那么就会产生很多问题。一旦循环完成，其所依赖的变量就不存在了。
+ 
+直接上代码：
+test文件只是一个空行，意味着每一个循环体都会执行一次。
+
+```shell
+    #!/bin/bash
+    t=0
+    while read line;do
+    {
+      t=2
+    }
+    done < test
+    
+    echo "1:"${t}
+    cat test| while read line;
+    do
+      echo "2:"${t}   #已经是在子进程内了，子进程会将父进程进行一份拷贝。
+      t=3
+      echo "3:"${t}   #子进程的值的改变不会影响父进程的值。
+    done
+    echo "4:"${t}     #打印父进程的值
+```
+最终的输出结果很显而易见了，读者自己去试试吧。说道这里顺带梳理下子父进程的关系。
+每当我们在一个shell里执行一个脚本程序的时候，该shell都会fork出一个新进程，从而启动另一个命令解释器来解释执行我们的脚本。新进程就是一个子shell，而之前的shell则是一个父shell。
+
+在我们所运行的脚本里，我们还可以启动新的子 shell 进程，这些子 shell 进程使脚本并行地运行着多个子任务。一般而言，在一个脚本里执行一个外部命令(普通的可执行文件)时，shell 会 fork 出一个子进程，然后再用 exec 来执行这个程序；但是，bash shell 的内置命令(builtin)却不会这样，它们是直接执行的。所以，等价的内置命令的执行速度会比执行外部命令要来的快。
+
+这里埋下几个遗留问题，后续文档进行解决。  
+1.  哪些情况下会产生新的子进程。  
+2.  进程间通信——如何让子进程跟父进程进行通信。  
