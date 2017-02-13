@@ -1,0 +1,279 @@
+Build a Simple Todo App with Vue.js and Vuex 2.0
+An introduction to building apps with Vue.js and Vuex 2.0
+This tutorial will cover some of the basics of building an app using the latest versions of Vue.js and Vuex.
+Vue.js (pronounced /vjuː/, like view) is a library for building interactive web interfaces. The goal of Vue.js is to provide the benefits of reactive data binding and composable view components with an API that is as simple as possible.
+Vue 2.0 is in the RC phase of its development at the time of this writing. A number of excellent features have been added to Vue in v2.0, including, but not limited to, the virtual-DOM.
+Vuex also underwent a recent update and is now in RC phase. We will discuss how one should create one’s Vuex store based on the latest version of Vuex by building a simple todo app that will allow users to add, edit, complete, and remove tasks.
+Vuex is an application architecture for centralized state management in Vue.js applications. It is inspired by Flux and Redux, but with simplified concepts and an implementation that is designed specifically to take advantage of Vue.js’ reactivity system.
+Getting Started
+Vue has streamlined the process of getting started with vue-cli. Many in the Vue community have also contributed by creating similar projects that make getting started a breeze. In this tutorial we are going to use a more minimal setup called webpack-simple-2.0. The setup process is straightforward, but since this setup does not ship with Vuex, we will have to import it into our project by:
+npm install vuex@next
+This will install the latest version of Vuex.
+Inside of our project, we already have a component and Vue instance. Let’s remove the contents inside:
+<div id=”app”>
+</div>
+As well as the contents in the export expression. App.vue should now look like this:
+<template>
+ <div id=”app”>
+ </div>
+</template>
+<script>
+export default {
+} 
+</script>
+<style>
+body {
+ font-family: Helvetica, sans-serif;
+}
+</style>
+Vuex Store
+Let’s begin by creating our Vuex store. Create a folder inside the src directory called store. Inside store we will add a file named store.js which will contain our entire store.
+At the center of every Vuex application is the store. A “store” is basically a container that holds your application state. There are two things that makes a Vuex store different from a plain global object:
+Vuex stores are reactive. When Vue components retrieve state from it, they will reactively and efficiently update if the store’s state changes.
+2. You cannot directly mutate the store’s state. The only way to change a store’s state is by explicitly dispatching mutations. This makes every state change easily track-able, and enables tooling that helps us better understand our applications.
+In earlier version of Vuex, a separate file inside one’s store directory would be created for actions. One of the newest features of Vuex is the ability to define actions and getters in one’s store; in doing so, making one’s modules more portable and composable. Here is the basic structure of our store:
+import Vue from ‘vue’
+import Vuex from ‘vuex’
+Vue.use(Vuex)
+export default new Vuex.Store({
+ state: {
+ 
+ },
+ mutations: {
+ },
+ actions: {
+ }
+})
+If you are new to Vuex, the terms state, mutations, and actions might be confusing. However, the concept behind each is quite simple. We create a state object that holds the initial state when our the app starts up. Next we create an object for storing our mutations. In Vuex, mutations are basically events. Finally, we create an object to store our actions. Actions are functions that dispatch mutations. This is what our finished store will look like:
+import Vue from ‘vue’
+import Vuex from ‘vuex’
+Vue.use(Vuex)
+export default new Vuex.Store({
+ state: {
+   todos: [],
+   newTodo: ‘’
+ },
+ mutations: {
+   GET_TODO(state, todo){
+     state.newTodo = todo
+   },
+   ADD_TODO(state){
+     state.todos.push({
+       body: state.newTodo,
+       completed: false
+     })
+   },
+   EDIT_TODO(state, todo){
+      var todos = state.todos
+      todos.splice(todos.indexOf(todo), 1)
+      state.todos = todos
+      state.newTodo = todo.body
+   },
+   REMOVE_TODO(state, todo){
+      var todos = state.todos
+      todos.splice(todos.indexOf(todo), 1)
+   },
+   COMPLETE_TODO(state, todo){
+     todo.completed = !todo.completed
+   },
+   CLEAR_TODO(state){
+     state.newTodo = ''
+   }
+  },
+ actions: {
+   getTodo({commit}, todo){
+     commit(‘GET_TODO’, todo)
+   },
+   addTodo({commit}){
+     commit(‘ADD_TODO’)
+   },
+   editTodo({commit}, todo){
+     commit(‘EDIT_TODO’, todo)
+   },
+   removeTodo({commit}, todo){
+     commit(‘REMOVE_TODO’, todo)
+   },
+   completeTodo({commit}, todo){
+    commit(‘COMPLETE_TODO’, todo)
+   },
+   clearTodo({commit}){
+     commit('CLEAR_TODO')
+   }
+})
+State
+The initial state, when our app starts up, is an empty list of todos, which will store our newly added todos, and an empty string, which will hold onto the task to be added to todos.
+Mutations
+Each mutation has a name and a handler: the handler takes as its first argument the state. It is a convention to name mutations in all caps in order to distinguish them from ordinary functions. GET_STATE takes the value entered in by the user and assigns it to state.newTodo. ADD_TODO, when triggered, adds a new todo to our list of todos — with body being set to the value of state.newTodo and completed being set to false. The mutations are straightforward, so we won’t spend much time explaining each of them in detail.
+Actions
+Vuex actions expect a store as a required argument followed by optional arguments. Using argument destructuring, it is possible to pass additional arguments using the following syntax:
+addTodo({commit}){
+     commit(‘ADD_TODO’)
+},
+Without argument destructuring:
+addTodo = function(store){
+  var commit = store.commit
+  commit('ADD_TODO')
+}
+What happened to dispatch?
+If you have experience with earlier versions of Vuex you might be thrown off by the new terms. In Vuex 2.0, dispatch is reserved for firing actions and commit is used for triggering mutations. An action is dispatched; a mutation is committed. Because our actions are defined inside of our Vuex store, actions can be dispatched in various modules with a single call:
+<button @click=”$store.dispatch(‘addTodo’)”>Add Todo</button>
+When addTodo is dispatched, it triggers the ADD_TODO mutation and pushes a new todo to the existing list of todos. The rest of the actions, when fired, behave in a similar manner so there is no need to go over each one.
+That’s it for our store. All that’s left is to import and register it in our Vue instance located in main.js:
+import Vue from ‘vue’
+import App from ‘./App.vue’
+import store from ‘./store/store’
+new Vue({
+  el: ‘#app’,
+  store,
+  render: h => h(App)
+})
+Building Components
+Our simple todo app will be built from four different components: App, GetTodo, CurrentTodos, and CompletedTodos.
+Components are one of the most powerful features of Vue.js. They help you extend basic HTML elements to encapsulate reusable code. At a high level, Components are custom elements that Vue.js’ compiler would attach specified behavior to.
+For an application as simple as a todo, it would be okay to build the entire app from a single component. However, in this tutorial we want to demonstrate how Vuex is used to communicate between various unrelated components.
+GetTodo
+Before building our components, let’s first create a components sub-directory inside our src directory to store our app components. App.vue can remain in ‘./src’ directory. It is also a good idea to pull bootstrap in for basic styling inside index.html.
+Our GetTodo component:
+<template>
+    <div id="get-todo" class="container">
+        <input class="form-control"
+               :value="newTodo"
+               @change="getTodo"
+               placeholder="I need to...">
+        <button class="btn btn-primary" @click="addTodo">Add Todo</button>
+    </div>
+</template>
+<script>
+    export default{
+        methods: {
+            getTodo(e){
+                this.$store.dispatch('getTodo', e.target.value)
+            },
+            addTodo(){
+                this.$store.dispatch('addTodo')
+                this.$store.dispatch('clearTodo')
+            }
+        },
+        computed: {
+            newTodo(){
+                return this.$store.getters.newTodo
+            }
+        }
+}
+</script>
+If you are familiar with Vuex, you may be wondering about the absence of vuex option. As of v2.0, the vuex option has been deprecated in favor of computed properties and methods. The author contends that using computed properties and methods alleviates the need to import the store everywhere it will be needed. Another change you’ll likely notice is the absence of getters. In v2.0, getters are defined in the store and accessed by:
+store.getters
+Inside of our store, add a getters object below the existing actions object. Add the following:
+getters: {
+    newTodo: state => state.newTodo,
+    todos: state => state.todos.filter((todo) => {return   !todo.completed}),
+}
+newTodo returns the value of the new todo entered by the user. This value is bound to the input. Todos returns an array containing all of the todos whose completed value is false. Since we also want to display all the completed todos inside the CompletedTodos component, we might as well add that now:
+completedTodos: state => state.todos.filter((todo) => {return todo.completed})
+Next, we should register our components inside of our App component. We register and use components as custom elements like so:
+<template>
+  <div id="app" class="container">
+    <CompletedTodos></CompletedTodos>
+    <GetTodo></GetTodo>
+    <CurrentTodos></CurrentTodos>
+  </div>
+</template>
+<script>
+import GetTodo from './components/GetTodo.vue'
+import CurrentTodos from './components/CurrentTodos.vue'
+import CompletedTodos from './components/CompletedTodos.vue'
+export default {
+  components: {
+    GetTodo,
+    CurrentTodos,
+    CompletedTodos
+  }
+ 
+}
+</script>
+<style>
+body {
+  font-family: Helvetica, sans-serif;
+}
+</style>
+CurrentTodos
+CurrentTodos component is responsible for displaying all todos whose completed value is false. Along with displaying the body of each todo, the component also provides buttons for editing, completing, and removing a todo from the todo list. The component also shows the number of todos that are in progress. This is what CurrentTodos looks like:
+<template>
+    <div id="current-todos" class="container">
+        <h3 v-if="todos.length > 0">Current({{todos.length}})</h3>
+        <ul class="list-group">
+            <li class="list-group-item" v-for="todo in todos">
+                {{todo.body}}
+            <div class="btn-group">
+                <button type="button" @click="edit(todo)" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-edit"></span> Edit
+                </button>
+                <button type="button" @click="complete(todo)" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-ok-circle"></span> Complete
+                </button>
+                <button type="button" @click="remove(todo)" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-remove-circle"></span> Remove
+                </button>
+            </div>
+            </li>
+        </ul>
+    </div>
+</template>
+<script>
+export default{
+    methods: {
+        edit(todo){
+            this.$store.dispatch('editTodo', todo)
+        },
+        complete(todo){
+            this.$store.dispatch('completeTodo', todo)
+        },
+        remove(todo){
+            this.$store.dispatch('removeTodo', todo)
+        }
+    },
+    computed: {
+        todos(){
+            return this.$store.getters.todos
+        }
+    }
+}
+</script>
+<style>
+    .btn-group{
+        float: right;
+    }
+</style>
+When a user clicks on edit, the todo is removed and the value of the todo.body appears in the input. The user can then edit the body of the todo and add the edited text back into the list of current todos. Removing a todo will remove it from the todos list altogether. By completing a todo, the user changes the value of completed from false to true. Because we are only mapping over the todos that have a completed value of false, the todo will no longer be displayed in the current todos. Instead, it will be displayed as a completed todo.
+CompletedTodos
+This is our CompletedTodos component:
+<template>
+    <div id="completed-todos">
+        <h3 v-if="completed.length > 0">Completed({{completed.length}})</h3>
+        <ul class="list-group">
+            <li class="list-group-item" v-for="todo in completed">
+                {{todo.body}}
+                <button type="button" @click="remove(todo)" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-remove-circle"></span> Remove
+                </button>
+            </li>
+        </ul>
+</div>
+</template>
+<script>
+    export default{
+        methods: {
+            remove(todo){
+                this.$store.dispatch('removeTodo', todo)
+            }
+        },
+        computed: {
+            completed(){
+                return this.$store.getters.completedTodos
+            }
+        }
+    }
+</script>
+Completed todos are displayed as a user completes current todos. For this tutorial, we only display the number of completed todos, the body of the todo, and an option to remove the completed todos from the list.
+There are plenty of other features we could add to our app to enhance it’s functionality, but I hope this brief introduction helped you better understand how to get started writing applications in Vue and Vuex 2.0.
+Source code for our simple todo app can be found here.
