@@ -24,3 +24,18 @@ https://github.com/zpng/spring-cloud-microservice-examples
 http://www.cnblogs.com/blqw/p/3782420.html
 录音页面
 http://www.infoq.com/cn/articles/knowledge-behind-goroutine  并发与并行 论go语言的route
+
+
+当学习过程越来越深入的时候，你会发现编程就像是在扯一大团毛线，有太多细枝末节需要研究和探讨。世上无难事，只怕有心人。这时，我们就要善于利用网络资源，针对某个知识点进行深入学习，加深对知识点的理解和掌握程度，当再次将这些知识点串联起来的时候，可能会发现居然已经学到了这种编程语言的精髓。
+
+以下是一些比较好的网络学习资源，不仅仅局限于编程。
+
+l   Learnable（sitepoint）：https://www.sitepoint.com/premium/
+一个提供网页设计与网页开发相关的书籍、课程和视频教程的在线学习环境。
+l   Udemy：https://www.udemy.com/
+提供40000多门在线课程，几乎囊括所有主题，包括编程。除英语课程外，还有韩语课程、日语课程、俄语课程、法语课程等，比较国际化。根据需求订阅课程后，就可以在不同设备上按照自己的节奏学习。
+l   Coursera：https://zh.coursera.org/
+有全球著名大学提供的近千个在线课程。
+l   StackOverflow：http://stackoverflow.com/
+论坛性质，提供很多关于编程话题的问题和答案——当你在其他地方都找不到答案时，可以去这边看看。
+还有其他方式可以进行深入学习：比如加入线下编程爱好者组织，跟进编程大神博客等。
