@@ -45,3 +45,5 @@ http://www.jianshu.com/p/b2ca52337fe5
 
 leancloud
 https://leancloud.cn/docs/realtime_rest_api.html#强制下线
+
+mybatis要配置断线重连哦
