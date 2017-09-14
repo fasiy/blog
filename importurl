@@ -102,3 +102,6 @@ http://www.infoq.com/cn/news/2017/03/Startups-API-practice  一个创业公司�
 
 我们使用Consul作为服务发现工具，它和HAProxy配合起来使用可以帮我们解决微服务架构的两个主要问题：服务发现（新服务上线时会自动注册）和客户端负载均衡（把请求均衡地分发到各个服务器上）。
 我们的工具箱里最有用的工具或许要数基础设施的自动化。我们使用Ansible在云端管理资源，包括单机、网络、DNS、运行持续集成工具的主机，等等。按照我们的惯例，开发一个新服务时，我们工程师的第一件事情就是为这个服务创建Ansible脚本。
+
+
+http://git.oschina.net/didispace/SpringBoot-Learning  springbootLearning
