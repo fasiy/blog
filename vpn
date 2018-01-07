@@ -1,0 +1,87 @@
+第一步、注册Vultr并购买服务器
+
+想要搭建5had0ws0cksR，大家首先要有一台服务器吧，前往http://www.iwvps.com/buyvultr.html购买。
+
+ 第二步、下载并安装Xshell软件（Windows版）
+
+点击下面的链接下载Xshell软件并安装，安装过程中注意选择个人/学校选项。
+
+主：https://pan.lanzou.com/1767980
+
+备：http://sw.bos.baidu.com/sw-search-sp/software/30b61b092de57/Xshell_5.0.1325.exe
+
+ 第三步、使用Xshell连接VPS
+
+安装完毕后打开软件。根据下图中的指示，我们点击会话框中的新建按钮。
+
+
+
+ 
+
+点击新建按钮后会弹出下图所示界面。根据图中指示，我们首先填写IP地址，然后点击确定按钮。
+
+
+
+点击确定按钮后我们会回到下图所示界面。根据图中指示，我们双击打开新建会话或者点击下方连接按钮打开新建会话。
+
+
+
+开新建会话后会弹出下图所示界面。根据图中指示，我们点击接受并保存按钮。
+
+
+
+点击接受并保存按钮会弹出下图所示界面。根据图中指示，我们首先填写SSH连接密码，然后打钩记住密码，最后点击确定按钮。
+
+如果提示需要输入用户名（登录名），那么请输入root！
+
+
+
+点击确定按钮后服务器会自动连接，连接完毕后我们会来到下图所示界面
+
+
+
+ 第四步、搭建5had0ws0cksR
+
+根据下图图中指示，我们首先复制
+
+wget -N --no-check-certificate https://raw.githubusercontent.com/bakuniverse/download/master/55r.sh && chmod +x 55r.sh && ./55r.sh
+然后回到Xshell软件，右击选择粘贴，粘贴完毕后回车继续。
+
+
+
+回车后系统会自行下载脚本文件并运行。根据下图图中指示，我们依次输入SSR的各项连接信息，最后回车继续。
+
+
+
+安装完成后会出现下图所示界面。根据图中指示，我们将红框圈中的信息保存到记事本内。
+
+
+
+ 第五步、安装破解版锐速
+
+根据下图图中指示，我们继续复制下列信息
+
+wget –no-check-certificate -O appex.sh https://raw.githubusercontent.com/0oVicero0/serverSpeeder_Install/master/appex.sh && chmod +x appex.sh && bash appex.sh install
+
+然后回到Xshell软件，右击选择粘贴，粘贴完毕后回车继续。
+
+
+
+回车后系统会自行下载脚本文件并运行。根据下图图中指示，我们依次输入锐速的各项配置信息，最后回车继续。
+
+
+
+回车后，系统自动执行命令完成破解版锐速安装，如下图所示。
+
+
+
+我们首先输入
+
+reboot
+然后回车，Xshell会断开连接，系统会在1分钟后重启完毕，此时可以关闭Xshell软件了。
+
+搭建教程到此结束，如果不能连接的，请检查自己的每一步操作。
+
+55R客户端下载:download  http://dl.teddysun.com/files/ShadowsocksR-4.7.0-win.7z
+
+安装完毕后，进入55R客户端输入图上正确参数，配置好。打开浏览器即可浏览网页。chrome建议配合SwitchyOmega 使用
